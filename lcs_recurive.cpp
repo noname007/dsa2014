@@ -42,13 +42,13 @@ int lcs_length_recursion(char *str1,char *str2)
     */
     int len1 = strlen(str1);
     int len2 = strlen(str2);
-//    int **p = (int **) malloc(sizeof(int *) * (len1+3));
-//    for(int i = 0;i<len1;++i)
-//    {
-//        p[i] = (int *) malloc(sizeof(int) * (len2+3));
-//        memset(p[i],0,sizeof(int)*(len2+3));
-//    }
-    int p[100][100];
+    int **p = (int **) malloc(sizeof(int *) * (len1+3));
+    for(int i = 0;i<len1+3;++i)
+    {
+        p[i] = (int *) malloc(sizeof(int) * (len2+3));
+        memset(p[i],0,sizeof(int)*(len2+3));
+    }
+//    int p[100][100];
 
 
     for(int i = 1; i <= len1; ++i)
@@ -78,14 +78,15 @@ int lcs_length_recursion(char *str1,char *str2)
         cout<<endl;
     }
 
-//    for(int i = 0; i < len1;++i)
-//        free(p[i]);
-//    free(p);
+    for(int i = 0; i < len1;++i)
+        free(p[i]);
+    free(p);
     return p[len1][len2];
 
 }
 
 int main()
+//int lcs
 {
     char str11[100],str22[100];
     char *str1 = "program";
@@ -93,7 +94,7 @@ int main()
     cout<<"Calculat LCS('program','algorithm') = ? y/n"<<endl;
 
     char temp;
-    cin >>temp;
+//    cin >>temp;
 
     if(temp=='n')
     {
