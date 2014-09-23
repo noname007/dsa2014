@@ -1,8 +1,24 @@
-#include<cstdio>
-#include<cstdlib>
-#include<iostream>
-using namespace std;
+//#include<cstdio>
+//#include<cstdlib>
+//#include<iostream>
+//using namespace std;
+#include<stdio.h>
+#include<stdlib.h>
 int dot;
+
+int _bq(int *arr, int start, int last,int num)
+{
+    int mid = (start+last)/2;
+    while(1)
+    {
+        if(arr['mid'] >= num)
+        {
+
+        }
+    }
+}
+
+
 int bq(int *arr,int start,int last, int &num)
 {
     if(start>last)
@@ -57,10 +73,11 @@ int main()
     {
         scanf("%d%d",&start,&last);
         first = bq(quence,0,dot-1,start);
-        second = bq(quence,0,dot-1,last);
-        if(quence[second+1] == last)
+        second = bq(quence,first,dot-1,last);
+        if(second < dot && quence[second+1] == last)
             second += 1;
-        cout << second - first<<endl;
+        printf("%d\n",second-first);
+//        cout << second - first<<endl;
     }
     return 0;
 }
