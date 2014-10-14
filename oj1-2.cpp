@@ -3,15 +3,19 @@
 #include<iostream>
 using namespace std;
 
-typedef struct ListNode{
+typedef struct ListNode
+{
     char data;
     ListNode *success;
     ListNode *parent;
-}SListNode;
+} SListNode;
 
-class List{
+class List
+{
+
     SListNode * head = new SListNode,*tail=new SListNode,*cycleHead = new SListNode,*cycleTail = new SListNode;
-    int _nodeNum=0,_cycleNode = 0;
+    int _nodeNum=0,_cycleNodeNum = 0;
+
  public:
     List()
     {
@@ -21,6 +25,10 @@ class List{
         head->parent = NULL;
         head->success = NULL;
         _insertAfter(head,tail);
+    }
+    ~List()
+    {
+
     }
 
     void insertBefore(SListNode *a,SListNode *b)
@@ -35,6 +43,18 @@ class List{
         ++_nodeNum;
     }
 
+    void insertNodeInX(int x,SListNode * Node)
+    {
+        SListNode *temp = head;
+        while(x--)
+        {
+            temp = temp->success;
+        }
+        insertBefore(temp,Node);
+        check_rule(Node);
+    }
+
+
     int getNodeNum()
     {
         return _nodeNum;
@@ -44,11 +64,12 @@ class List{
     {
         n->parent->success = n->success;
         n->success->parent = n->parent;
+        --_nodeNum;
         _insertAfter(cycleHead,n);
-        ++_cycleNode;
+        ++_cycleNodeNum;
     }
 
-    void
+
  private:
     void _removeNode(SListNode *a)
     {
@@ -70,10 +91,36 @@ class List{
         b->parent = a;
     }
 
+    void check_rule(SListNode *Node)
+    {
+        int same_node_num = 0;
+        SListNode * tail = Node->success,*head = Node->parent;
+
+        while(Node->data == tail->data)
+        {
+            tail = tail->success;
+            ++same_node_num;
+        }
+
+        while(Node->data == head->data)
+        {
+            ++same_node_num;
+            head = head->parent;
+        }
+
+        if( 2 < same_node_num)
+        {
+            cycleTail->parent->success = head->success;
+            tail->parent->success = cycleTail;
+            _cycleNodeNum += same_node_num;
+        }
+    }
+
     void _deleteDataList(SListNode *head)
     {
 
     }
+
     void _deleteCycleList(SListNode * cycleHead)
     {
 
@@ -83,4 +130,8 @@ class List{
 int main()
 {
     List a;
+    int n;
+
+    scanf("%d",&n);
+    // scan
 }
