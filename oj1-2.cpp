@@ -1,6 +1,7 @@
 #include<cstdio>
 #include<cstdlib>
 #include<iostream>
+
 using namespace std;
 
 typedef struct ListNode
@@ -31,33 +32,48 @@ class List
 
     }
 
-    void insertBefore(SListNode *a,SListNode *b)
+    void insertBefore(SListNode *a, char c)
     {
+        SListNode* b = new SListNode;
+        b->data = c;
         _insertBefore(a,b);
         ++_nodeNum;
     }
 
-    void  insertAfter(SListNode *a,SListNode *b)
+    void  insertAfter(SListNode *a,char c)
     {
+        SListNode * b = new SListNode;
+        b->data = c;
         _insertAfter(a,b);
         ++_nodeNum;
     }
 
-    void insertNodeInX(int x,SListNode * Node)
+    void insertNodeInX(int x,char Node)
     {
         SListNode *temp = head;
+
         while(x--)
         {
             temp = temp->success;
         }
+//        Node->data = c;
         insertBefore(temp,Node);
-        check_rule(Node);
+        check_rule(temp->parent);
     }
 
 
     int getNodeNum()
     {
         return _nodeNum;
+    }
+
+    void travelAll()
+    {
+        SListNode * temp =  head;
+        while((temp = temp->success) != tail){
+            printf("%c",temp->data);
+        }
+        printf("\n");
     }
 
     void deleteNode(SListNode *n)
@@ -69,8 +85,15 @@ class List
         ++_cycleNodeNum;
     }
 
-
- private:
+    SListNode * getTail()
+    {
+        return tail;
+    }
+    SListNode * getHead()
+    {
+        return head;
+    }
+private:
     void _removeNode(SListNode *a)
     {
         a->parent->success = a->success;
@@ -96,13 +119,13 @@ class List
         int same_node_num = 0;
         SListNode * tail = Node->success,*head = Node->parent;
 
-        while(Node->data == tail->data)
+        while(tail != NULL && Node->data == tail->data)
         {
             tail = tail->success;
             ++same_node_num;
         }
 
-        while(Node->data == head->data)
+        while(head !=NULL && Node->data == head->data)
         {
             ++same_node_num;
             head = head->parent;
@@ -129,9 +152,31 @@ class List
 
 int main()
 {
-    List a;
+    List *a = new List;
     int n;
+    char c;
+    while((c = getchar())!='\n')
+    {
 
-    scanf("%d",&n);
-    // scan
+        a->insertBefore(a->getTail(),c);
+    }
+    getchar();
+    scanf("%d",&n) ;
+
+    int positon;
+    while(n--)
+    {
+        getchar();
+        scanf("%d %c\n",&positon,&c);
+        a->insertNodeInX(positon,c);
+
+        if(a->getNodeNum())
+        {
+            a->travelAll();
+        }
+        else{
+
+            printf("-\n");
+        }
+    }
 }
