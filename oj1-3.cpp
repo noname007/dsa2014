@@ -1,11 +1,28 @@
 #include<stdio.h>
 #include<stdlib.h>
+#define IO_BUF_SIZE 0x100000
+
 //#include<iostream>
-using namespace std;
+//using namespace std;
+
+const int SZ = 1<<20;
+struct fastio{
+    char inbuf[SZ];
+    char outbuf[SZ];
+    fastio(){
+        setvbuf(stdin,inbuf,_IOFBF,SZ);
+        setvbuf(stdout,outbuf,_IOFBF,SZ);
+    }
+}io;
+char _io_buf[IO_BUF_SIZE];
+//static char _out_buf[IO_BUF_SIZE];
+//setvbuf(stdin,_io_buf,_IOFBF,IO_BUF_SIZE);
+//setvbuf(stdout,_out_buf,_IOFBF,IO_BUF_SIZE);
 typedef struct
 {
     int x,y;
 }Point;
+
 Point P[5000005];
 int temp[5000005];
 int cmp(const void * a,const void * b)
@@ -44,7 +61,20 @@ long long int merge_sort(Point *arr,int start,int mid,int last)
 
 long long int _merge(Point * arr, int start, int last)
 {
-    if(start +1 == last)
+//    if(start + 2 == last)
+//    {
+//        if(arr[start].y > arr[start+1].y)
+//        {
+//            arr[start].y ^= arr[start+1].y;
+//            arr[start+1].y ^=  arr[start].y;
+//            arr[start].y ^= arr[start+1].y;
+//            return 1;
+//        }
+//        else
+//            return 0;
+//    }
+//    else
+    if(start + 1== last)
     {
         return 0;
     }
