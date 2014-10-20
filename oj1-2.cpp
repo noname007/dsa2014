@@ -10,22 +10,43 @@ typedef struct ListNode
     ListNode *success;
     ListNode *parent;
 } SListNode;
-
+//3ks Programcaicai
+const int SZ = 1<<20;
+struct fastio{
+    char inbuf[SZ];
+    char outbuf[SZ];
+    fastio(){
+        setvbuf(stdin,inbuf,_IOFBF,SZ);
+        setvbuf(stdout,outbuf,_IOFBF,SZ);
+    }
+}io;
+//3ks farui,but couldn't use;i don't the resone
+//#define IO_BUF_SIZE 1<<20
+//char _io_buf[IO_BUF_SIZE];
+//static char _out_buf[IO_BUF_SIZE];
+//setvbuf(stdin,_io_buf,_IOFBF,IO_BUF_SIZE);
 class List
 {
 
-    SListNode * head = new SListNode,*tail=new SListNode,*cycleHead = new SListNode,*cycleTail = new SListNode;
-    int _nodeNum=0,_cycleNodeNum = 0;
+    SListNode * head,*tail,*cycleHead ,*cycleTail ;
+    int _nodeNum,_cycleNodeNum;
+
 
  public:
     List()
     {
-        cycleHead->parent=NULL;
-        cycleHead->success=NULL;
-        _insertAfter(cycleHead,cycleTail);
-        head->parent = NULL;
-        head->success = NULL;
-        _insertAfter(head,tail);
+        _nodeNum=0;
+        _cycleNodeNum = 0;
+        head = new SListNode;
+        tail=new SListNode;
+        cycleHead = new SListNode;
+        cycleTail = new SListNode;
+        cycleTail->parent=cycleHead;
+        cycleHead->success=cycleTail;
+//        _insertAfter(cycleHead,cycleTail);
+        tail->parent = head;
+        head->success = tail;
+//        _insertAfter(head,tail);
     }
     ~List()
     {
@@ -56,9 +77,10 @@ class List
         {
             temp = temp->success;
         }
-//        Node->data = c;
-        insertBefore(temp,Node);
-        check_rule(temp->parent);
+
+        insertAfter(temp,Node);
+//        travelAll();
+        check_rule(temp->success);
     }
 
 
@@ -76,14 +98,14 @@ class List
         printf("\n");
     }
 
-    void deleteNode(SListNode *n)
-    {
-        n->parent->success = n->success;
-        n->success->parent = n->parent;
-        --_nodeNum;
-        _insertAfter(cycleHead,n);
-        ++_cycleNodeNum;
-    }
+//    void deleteNode(SListNode *n)
+//    {
+//        n->parent->success = n->success;
+//        n->success->parent = n->parent;
+//        --_nodeNum;
+//        _insertAfter(cycleHead,n);
+//        ++_cycleNodeNum;
+//    }
 
     SListNode * getTail()
     {
@@ -102,6 +124,7 @@ private:
 
     void _insertBefore(SListNode * a,SListNode *b)
     {
+        a->parent->success = b;
         b->parent =  a->parent;
         a->parent =  b;
         b->success = a;
@@ -109,23 +132,24 @@ private:
 
     void _insertAfter(SListNode *a, SListNode *b)
     {
+        a->success->parent = b;
         b->success = a->success;
         a->success = b;
         b->parent = a;
     }
 
-    void check_rule(SListNode *Node)
+    void * check_rule(SListNode *Node)
     {
-        int same_node_num = 0;
+        int same_node_num = 1;
         SListNode * tail = Node->success,*head = Node->parent;
-
-        while(tail != NULL && Node->data == tail->data)
+//        travelAll();
+        while(tail != this->tail && Node->data == tail->data)
         {
             tail = tail->success;
             ++same_node_num;
         }
-
-        while(head !=NULL && Node->data == head->data)
+//  printf("%d\n",same_node_num);
+        while(head !=this->head && Node->data == head->data)
         {
             ++same_node_num;
             head = head->parent;
@@ -134,9 +158,25 @@ private:
         if( 2 < same_node_num)
         {
             cycleTail->parent->success = head->success;
+            head->success->parent = cycleTail->parent;
+
             tail->parent->success = cycleTail;
+            cycleTail->parent = tail->parent;
+
+            tail->parent = head;
+            head->success = tail;
+
             _cycleNodeNum += same_node_num;
+            _nodeNum -= same_node_num;
+            if(head != this->head )
+            {
+                check_rule(head);
+            }
         }
+//        return head;
+//        printf("%d\n",same_node_num);
+//        travelAll();
+//        return same_node_num
     }
 
     void _deleteDataList(SListNode *head)
@@ -155,19 +195,23 @@ int main()
     List *a = new List;
     int n;
     char c;
-    while((c = getchar())!='\n')
+    while((c =getchar())&&(c<='Z'&&c>='A'))
     {
-
         a->insertBefore(a->getTail(),c);
     }
-    getchar();
-    scanf("%d",&n) ;
+
+
+
+//    a->travelAll();
+
+     scanf("%d",&n) ;
 
     int positon;
     while(n--)
     {
-        getchar();
-        scanf("%d %c\n",&positon,&c);
+//        getchar();
+        scanf("%d\n",&positon);
+        while((c=getchar())&&(c<'A'||c>'Z'));
         a->insertNodeInX(positon,c);
 
         if(a->getNodeNum())
