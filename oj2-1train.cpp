@@ -40,12 +40,11 @@ int main()
                 op_record[op_record_top++] = 0;
                 check_train();
             }
-            else if(top < limit){
+            else {
                 train[top++] = i;
                 op_record[op_record_top ++] = 1;
-            }
-            else{
-                break;
+                if(top>=limit)
+                    break;
             }
         }
     }
